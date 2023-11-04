@@ -1,12 +1,5 @@
-import { TerminalOutput } from 'react-terminal-ui'
-
 export const files = ['test_01.txt', 'README.md']
 export const filesPlusSecret = [...files, '.secret.png 🔓']
-export const fileContents = {
-  'test_01.txt':
-    '¿Cómo se llama el creador de esta app? Escribe "submit <respuesta>" para enviar tu respuesta.',
-  'readme.md': 'This is the fake content of README.md.',
-}
 
 // Constants for terminal commands
 /** Command to view the YouTube channel */
@@ -27,17 +20,3 @@ export const COMMAND_HELP = 'help'
 export const COMMAND_SUBMIT = 'submit <answer>'
 /** Command to retrieve amount of points */
 export const COMMAND_SCORE = 'score'
-
-/**
- * Initial state for the terminal which includes the welcome message and available commands.
- */
-export const INITIAL_STATE = [
-  <TerminalOutput>
-    Bievenido a la terminal interactiva de msweb! &#128075;
-  </TerminalOutput>,
-  ,
-  <TerminalOutput></TerminalOutput>,
-  <TerminalOutput>
-    Escribe 'help' para ver los comandos disponibles.
-  </TerminalOutput>,
-]

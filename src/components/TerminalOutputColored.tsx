@@ -13,8 +13,7 @@ export const TerminalOutputPartiallyColored: React.FC<
 > = ({ command, description, color }) => (
   // tslint:disable-next-line
   <TerminalOutput>
-    <span style={{ color }}>{`${command}`}</span>
-    {description}
+    <span style={{ color }}>{`${command}`}</span> {description}
   </TerminalOutput>
 )
 

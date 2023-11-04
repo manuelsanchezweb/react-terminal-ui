@@ -4,15 +4,13 @@ import Terminal, {
   TerminalOutput,
 } from 'react-terminal-ui'
 import confetti from 'canvas-confetti'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   TerminalOutputColored,
   TerminalOutputPartiallyColored,
 } from './TerminalOutputColored'
 import {
   files,
-  fileContents,
-  INITIAL_STATE,
   COMMAND_HELP,
   COMMAND_YB,
   COMMAND_GAME,
@@ -25,41 +23,45 @@ import {
   filesPlusSecret,
 } from './data'
 import { greenBtnClick, redBtnClick, yellowBtnClick } from './buttons'
+import { LanguageSelector } from './LanguageSelector'
+import { useLanguageContext } from '../ctx/LanguageContext'
+import { useColorMode } from '../hooks/useColorMode'
+import { useFlags } from '../hooks/useFlags'
+
+const MAX_NUMBER_SECRETS = 3
 
 /**
  * The TerminalController component provides an interactive terminal interface.
  * It supports commands for navigating a virtual file system and external links.
  */
 export const TerminalUI = () => {
-  const [colorMode, setColorMode] = useState(ColorMode.Dark)
-  const [lineData, setLineData] = useState(INITIAL_STATE)
-  const [flags, setFlags] = useState<string[]>([])
+  const { data, language } = useLanguageContext()
+  const { colorMode, toggleColorMode } = useColorMode()
+  const [flags, setFlags] = useFlags()
 
-  // Initialize FLAGS from localStorage and set up a listener
-  useEffect(() => {
-    try {
-      const savedFlags = localStorage.getItem('FLAGS')
-      if (savedFlags) {
-        setFlags(JSON.parse(savedFlags))
-      }
-    } catch (e) {
-      console.error('Failed to parse flags from localStorage:', e)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (flags.length === 0) return
-    localStorage.setItem('FLAGS', JSON.stringify(flags))
-  }, [flags])
+  const fileContents = {
+    'test_01.txt': data.challenges.challenge2,
+    'readme.md': data.challenges.challenge3,
+  }
 
   /**
-   * Toggles the color mode between light and dark.
+   * Initial state for the terminal which includes the welcome message and available commands.
    */
-  const toggleColorMode = useCallback(() => {
-    setColorMode((prevMode) =>
-      prevMode === ColorMode.Light ? ColorMode.Dark : ColorMode.Light
-    )
-  }, [])
+  const initialState = useMemo(
+    () => [
+      <TerminalOutput>{data.terminal.welcome}</TerminalOutput>,
+      <TerminalOutput></TerminalOutput>,
+      <TerminalOutput>{data.terminal.help}</TerminalOutput>,
+    ],
+    [language]
+  )
+
+  const [lineData, setLineData] = useState<JSX.Element[]>(initialState)
+
+  // Update the lineData state whenever the initialState changes
+  useEffect(() => {
+    setLineData(initialState)
+  }, [initialState])
 
   // Function to handle the submission of an answer
   const handleSubmission = useCallback(
@@ -70,16 +72,16 @@ export const TerminalUI = () => {
           confetti()
           lineData.push(
             <TerminalOutput>
-              Esta respuesta ya la habías acertado antes, pero toma un poquito
-              de confetti.
+              {data.terminal.answers.alreadyRight}
             </TerminalOutput>
           )
         } else {
           confetti()
           lineData.push(
-            <TerminalOutput>
-              ¡Felicidades! Respuesta correcta enviada. &#128075;
-            </TerminalOutput>
+            <TerminalOutputColored
+              message={data.terminal.answers.right}
+              color="#ffce00"
+            />
           )
 
           setFlags((prevFlags) => Array.from(new Set([...prevFlags, 'manuel'])))
@@ -89,15 +91,14 @@ export const TerminalUI = () => {
           confetti()
           lineData.push(
             <TerminalOutput>
-              Esta respuesta ya la habías acertado antes, pero toma un poquito
-              de confetti.
+              {data.terminal.answers.alreadyRight}
             </TerminalOutput>
           )
         } else {
           confetti()
           lineData.push(
             <TerminalOutputColored
-              message="¡Felicidades, Facebookero! Respuesta correcta enviada."
+              message={data.terminal.answers.right}
               color="#ffce00"
             />
           )
@@ -105,11 +106,29 @@ export const TerminalUI = () => {
             Array.from(new Set([...prevFlags, 'mark zuckerberg']))
           )
         }
+      } else if (answer === 'alemania') {
+        if (flags.includes('alemania')) {
+          confetti()
+          lineData.push(
+            <TerminalOutput>
+              {data.terminal.answers.alreadyRight}
+            </TerminalOutput>
+          )
+        } else {
+          confetti()
+          lineData.push(
+            <TerminalOutputColored
+              message={data.terminal.answers.right}
+              color="#ffce00"
+            />
+          )
+          setFlags((prevFlags) =>
+            Array.from(new Set([...prevFlags, 'alemania']))
+          )
+        }
       } else {
         lineData.push(
-          <TerminalOutput>
-            Esa no es la respuesta correcta. Inténtalo de nuevo.
-          </TerminalOutput>
+          <TerminalOutput>{data.terminal.answers.wrong}</TerminalOutput>
         )
       }
     },
@@ -141,21 +160,19 @@ export const TerminalUI = () => {
         break
       case COMMAND_HELP:
         // Append a help message to the terminal output
-        ld.push(
-          <TerminalOutput>Estos son los comandos disponibles:</TerminalOutput>
-        )
+        ld.push(<TerminalOutput>{data.terminal.commands}</TerminalOutput>)
         ld.push(<TerminalOutput></TerminalOutput>)
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_YB,
-            description: ' abre mi canal de YouTube.',
+            description: data.terminal.commandList.yb,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_GAME,
-            description: ' abre el último juego que estoy desarrollando.',
+            description: data.terminal.commandList.game,
             color: '#ce5023',
           }) as JSX.Element
         )
@@ -163,56 +180,56 @@ export const TerminalUI = () => {
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_LS,
-            description: ' lista los archivos en el directorio.',
+            description: data.terminal.commandList.ls,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: 'ls -l',
-            description: ' lista archivos uno a uno.',
+            description: data.terminal.commandList.lsl,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_LSLA,
-            description: ' lista archivos uno a uno (también los ocultos).',
+            description: data.terminal.commandList.lsla,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_CAT,
-            description: ' muestra el contenido de un archivo.',
+            description: data.terminal.commandList.cat,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_CLEAR,
-            description: ' limpia todo lo anterior.',
+            description: data.terminal.commandList.clear,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_SUBMIT,
-            description: ' envía una respuesta.',
+            description: data.terminal.commandList.submit,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_SCORE,
-            description: ' descubre tu puntuación actual.',
+            description: data.terminal.commandList.score,
             color: '#ce5023',
           }) as JSX.Element
         )
         ld.push(
           TerminalOutputPartiallyColored({
             command: COMMAND_HELP,
-            description: ' muestra los comandos disponibles.',
+            description: data.terminal.commandList.help,
             color: '#ce5023',
           }) as JSX.Element
         )
@@ -228,16 +245,12 @@ export const TerminalUI = () => {
         break
       case COMMAND_CLEAR:
         ld = []
-        ld.push(
-          <TerminalOutput>
-            Escribe help para ver los comandos disponibles.
-          </TerminalOutput>
-        )
+        ld.push(<TerminalOutput>{data.terminal.help}</TerminalOutput>)
         break
       case COMMAND_SCORE:
         // Display the current score based on the number of flags
         ld.push(
-          <TerminalOutput>{`Total de puntos: ${flags.length}`}</TerminalOutput>
+          <TerminalOutput>{`${flags.length}/${MAX_NUMBER_SECRETS} secretos encontrados`}</TerminalOutput>
         )
         break
       case COMMAND_LS:
@@ -276,7 +289,7 @@ export const TerminalUI = () => {
             ld.push(<TerminalOutput></TerminalOutput>)
             ld.push(
               <TerminalOutputColored
-                message="¿Quién es esta persona? Escribe submit con tu respuesta."
+                message={data.challenges.challenge1}
                 color="#fae89c"
               />
             )
@@ -285,22 +298,21 @@ export const TerminalUI = () => {
 
             console.log('filename', filename)
             ld.push(
-              <TerminalOutput>{`Mostrando el contenido de ${filename}:`}</TerminalOutput>
+              <TerminalOutput>{`${data.terminal.messages.showing} ${filename}:`}</TerminalOutput>
             )
             ld.push(
               // @ts-ignore
-              <TerminalOutput>{fileContents[filename]}</TerminalOutput> // Display the content of the file
+              <TerminalOutput>{fileContents[filename]}</TerminalOutput>
             )
           } else {
             ld.push(
-              <TerminalOutput>{`Archivo no encontrado: ${filename}`}</TerminalOutput>
+              <TerminalOutput>{`${data.terminal.messages.notFound} ${filename}`}</TerminalOutput>
             )
           }
         } else {
           ld.push(
             <TerminalOutput>
-              Este comando no es reconocido. Escribe 'help' para ver todos los
-              comandos disponibles.
+              {`Comando no reconocido: '${command}'. ${data.terminal.help}`}
             </TerminalOutput>
           )
         }
@@ -329,12 +341,13 @@ export const TerminalUI = () => {
           {lineData}
         </Terminal>
       </div>
-      <div className="flex flex-row-reverse p-2">
+      <div className="flex flex-row-reverse w-full justify-between p-2">
+        <LanguageSelector />
         <button
           className={btnClasses.join(' ')}
           onClick={() => toggleColorMode()}
         >
-          Toggle {colorMode === ColorMode.Light ? 'Dark' : 'Light'} Mode
+          {data.settings.switcherMode}
         </button>
       </div>
     </div>
