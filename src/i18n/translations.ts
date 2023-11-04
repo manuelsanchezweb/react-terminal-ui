@@ -36,6 +36,7 @@ export const TRANSLATIONS = {
       messages: {
         showing: 'Mostrando el contenido de ',
         notFound: 'No se ha encontrado el archivo: ',
+        secretsFound: 'secretos encontrados',
       },
     },
     challenges: {
@@ -84,6 +85,7 @@ export const TRANSLATIONS = {
       messages: {
         showing: 'Showing the content of ',
         notFound: 'File not found: ',
+        secretsFound: 'secrets found',
       },
     },
     challenges: {
@@ -132,6 +134,7 @@ export const TRANSLATIONS = {
       messages: {
         showing: 'Zeigt den Inhalt von ',
         notFound: 'Datei nicht gefunden: ',
+        secretsFound: 'Geheimnisse gefunden',
       },
     },
     challenges: {
