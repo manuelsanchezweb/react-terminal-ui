@@ -59,7 +59,7 @@ h1 {
 }
 
 .react-terminal-line {
-  white-space: wrap;
+  white-space: wrap !important;
 }
 
 .github-corner svg {

@@ -3,6 +3,9 @@ export const TRANSLATIONS = {
     intro: {
       title: 'Terminal creada con react-terminal-ui',
       subtitle: 'Inspirado en el codember de midudev',
+      description:
+        'Esta es una terminal interactiva que esconde unos cuantos secretos. Haz uso de los comandos para descubrirlos. Tienes el código fuente en mi GitHub.',
+      appResponsiveness: 'Esta aplicación solo funciona en pantallas grandes.',
     },
     settings: {
       switcherLanguage: 'Elegir idioma',
@@ -42,11 +45,15 @@ export const TRANSLATIONS = {
       challenge3:
         '¿En qué país vivo? Escribe "submit <respuesta>" para enviar tu respuesta.',
     },
+    footer: 'Hecho con mucho 💜 por ',
   },
   ENGLISH: {
     intro: {
       title: 'Terminal created with react-terminal-ui',
       subtitle: 'Inspired by midudevs codember',
+      description:
+        'This is an interactive terminal that hides a few secrets. Use the commands to discover them. You have the source code on my GitHub.',
+      appResponsiveness: 'This app only works on large screens.',
     },
     settings: {
       switcherLanguage: 'Choose language',
@@ -86,11 +93,15 @@ export const TRANSLATIONS = {
       challenge3:
         'What country do I live in? Type "submit <answer>" to send your answer.',
     },
+    footer: 'Made with much 💜 by ',
   },
   GERMAN: {
     intro: {
       title: 'Terminal erstellt mit react-terminal-ui',
       subtitle: 'Inspiriert von midudevs codember',
+      description:
+        'Dies ist ein interaktives Terminal, das ein paar Geheimnisse verbirgt. Verwenden Sie die Befehle, um sie zu entdecken. Sie haben den Quellcode auf meinem GitHub.',
+      appResponsiveness: 'Diese App funktioniert nur auf großen Bildschirmen.',
     },
     settings: {
       switcherLanguage: 'Sprache wählen',
@@ -131,5 +142,6 @@ export const TRANSLATIONS = {
       challenge3:
         'In welchem Land lebe ich? Geben Sie "submit <Antwort>" ein, um Ihre Antwort zu senden.',
     },
+    footer: 'Gemacht mit viel 💜 von ',
   },
 }

@@ -298,7 +298,7 @@ export const TerminalUI = () => {
 
             console.log('filename', filename)
             ld.push(
-              <TerminalOutput>{`${data.terminal.messages.showing} ${filename}:`}</TerminalOutput>
+              <TerminalOutput>{`${data.terminal.messages.showing}${filename}:`}</TerminalOutput>
             )
             ld.push(
               // @ts-ignore
@@ -328,28 +328,30 @@ export const TerminalUI = () => {
   ]
 
   return (
-    <div className="w-screen lg:max-w-[750px] px-5">
-      <div className="text-left">
-        <Terminal
-          name="React Terminal UI"
-          colorMode={colorMode}
-          onInput={onInput}
-          redBtnCallback={redBtnClick}
-          yellowBtnCallback={yellowBtnClick}
-          greenBtnCallback={greenBtnClick}
-        >
-          {lineData}
-        </Terminal>
+    <>
+      <div className="w-screen lg:max-w-[750px] px-5">
+        <div className="text-left">
+          <Terminal
+            name="React Terminal UI"
+            colorMode={colorMode}
+            onInput={onInput}
+            redBtnCallback={redBtnClick}
+            yellowBtnCallback={yellowBtnClick}
+            greenBtnCallback={greenBtnClick}
+          >
+            {lineData}
+          </Terminal>
+        </div>
+        <div className="flex flex-row-reverse w-full justify-between p-2">
+          <LanguageSelector />
+          <button
+            className={btnClasses.join(' ')}
+            onClick={() => toggleColorMode()}
+          >
+            {data.settings.switcherMode}
+          </button>
+        </div>
       </div>
-      <div className="flex flex-row-reverse w-full justify-between p-2">
-        <LanguageSelector />
-        <button
-          className={btnClasses.join(' ')}
-          onClick={() => toggleColorMode()}
-        >
-          {data.settings.switcherMode}
-        </button>
-      </div>
-    </div>
+    </>
   )
 }

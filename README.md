@@ -4,7 +4,8 @@
 
 # React Terminal UI
 
-Cool Terminal created using react-terminal-ui inspired by midudev's [codember](https://codember.dev/)
+Cool Terminal created using react-terminal-ui inspired by midudev's [codember](https://codember.dev/).
+
 Find the deployment [here](https://react-terminal-ui.vercel.app/)
 
 </div>
@@ -18,3 +19,4 @@ Hide different rewards and create different challenges by using and creating you
 - [ ] Finish translation into German and English of existing content
 - [ ] Add keyboard handling to suggest last submitted options when pressing arrow key
 - [ ] Add 'cd' functionality to access folders (both coming into and coming out)
+- [ ] Add maybe like a line between the last one and the input so that there is not Layout Shift
