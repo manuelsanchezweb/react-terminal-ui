@@ -93,7 +93,7 @@ export const TRANSLATIONS = {
       challenge2:
         'What is the name of the creator of this app? Type "submit <answer>" to send your answer.',
       challenge3:
-        'What country do I live in? Type "submit <answer>" to send your answer.',
+        'What country do I live in? Type "submit <answer>" to send your answer. Country is in Spanish!',
     },
     footer: 'Made with much 💜 by ',
   },
@@ -143,7 +143,7 @@ export const TRANSLATIONS = {
       challenge2:
         'Wie heißt der Schöpfer dieser App? Geben Sie "submit <Antwort>" ein, um Ihre Antwort zu senden.',
       challenge3:
-        'In welchem Land lebe ich? Geben Sie "submit <Antwort>" ein, um Ihre Antwort zu senden.',
+        'In welchem Land lebe ich? Geben Sie "submit <Antwort>" ein, um Ihre Antwort zu senden. Antwort ist auf Spanisch!',
     },
     footer: 'Gemacht mit viel 💜 von ',
   },
