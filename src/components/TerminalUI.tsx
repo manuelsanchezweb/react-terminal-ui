@@ -250,7 +250,7 @@ export const TerminalUI = () => {
       case COMMAND_SCORE:
         // Display the current score based on the number of flags
         ld.push(
-          <TerminalOutput>{`${flags.length}/${MAX_NUMBER_SECRETS} secretos encontrados`}</TerminalOutput>
+          <TerminalOutput>{`${flags.length}/${MAX_NUMBER_SECRETS} ${data.terminal.messages.secretsFound}`}</TerminalOutput>
         )
         break
       case COMMAND_LS:
