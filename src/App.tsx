@@ -8,6 +8,9 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen py-12">
+      <div id="glare"></div>
+      <div id="text"></div>
+      <div id="interlaced"></div>
       <GitHubCorner />
       <main className="flex flex-col items-center gap-6 justify-center mx-auto px-7 md:px-10 mt-auto">
         <div className="flex flex-col gap-4 max-w-[850px] w-full">
@@ -32,10 +35,20 @@ function App() {
           <SVGPC classExtra="w-52 h-52" />
         </div>
       </main>
-      <footer className="flex mx-auto px-5 md:px-10 mt-auto">
-        <a href="https://www.manuelsanchezweb.com"></a>
-        {data.footer} manuelsanchezweb
+      <footer className="flex mx-auto px-5 md:px-10 mt-auto gap-2">
+        <span> {data.footer}</span>{' '}
+        <a
+          target="_blank"
+          rel="nofollow noopener"
+          href="https://www.manuelsanchezweb.com"
+        >
+          {' '}
+          manuelsanchezweb
+        </a>
       </footer>
+      <div className="wave-wrapper">
+        <div className="wave"></div>
+      </div>
     </div>
   )
 }
