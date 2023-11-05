@@ -27,6 +27,7 @@ import { LanguageSelector } from './LanguageSelector'
 import { useLanguageContext } from '../ctx/LanguageContext'
 import { useColorMode } from '../hooks/useColorMode'
 import { useFlags } from '../hooks/useFlags'
+import { useCommandHistory } from '../hooks/useCommandHistory'
 
 const MAX_NUMBER_SECRETS = 3
 
@@ -38,6 +39,8 @@ export const TerminalUI = () => {
   const { data, language } = useLanguageContext()
   const { colorMode, toggleColorMode } = useColorMode()
   const [flags, setFlags] = useFlags()
+  // Hook for command history and current index
+  // const { addCommandToHistory, moveInHistory } = useCommandHistory()
 
   const fileContents = {
     'test_01.txt': data.challenges.challenge2,
@@ -57,6 +60,15 @@ export const TerminalUI = () => {
   )
 
   const [lineData, setLineData] = useState<JSX.Element[]>(initialState)
+
+  const { addCommandToHistory, moveInHistory, getCurrentCommand } =
+    useCommandHistory()
+  const [terminalInputValue, setTerminalInputValue] = useState('')
+
+  useEffect(() => {
+    // Set the terminal input value to the last command in the history on load
+    setTerminalInputValue(getCurrentCommand())
+  }, []) // Dependency array is empty to run only on mount
 
   // Update the lineData state whenever the initialState changes
   useEffect(() => {
@@ -318,8 +330,27 @@ export const TerminalUI = () => {
         }
         break
     }
+    addCommandToHistory(input) // Add input to history when command is executed
     setLineData(ld)
   }
+
+  // Handle arrow key events to navigate command history
+  useEffect(() => {
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp') {
+        moveInHistory('up')
+      } else if (e.key === 'ArrowDown') {
+        moveInHistory('down')
+      }
+      // Update the terminal input value with the command from the history
+      setTerminalInputValue(getCurrentCommand())
+    }
+
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [moveInHistory, getCurrentCommand])
 
   // Determine button classes based on the current color mode
   const btnClasses = [
@@ -335,6 +366,7 @@ export const TerminalUI = () => {
             name="React Terminal UI"
             colorMode={colorMode}
             onInput={onInput}
+            startingInputValue={terminalInputValue}
             redBtnCallback={redBtnClick}
             yellowBtnCallback={yellowBtnClick}
             greenBtnCallback={greenBtnClick}

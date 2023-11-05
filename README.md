@@ -16,7 +16,7 @@ Hide different rewards and create different challenges by using and creating you
 
 ## 🔮 Next ToDos
 
-- [ ] Finish translation into German and English of existing content
-- [ ] Add keyboard handling to suggest last submitted options when pressing arrow key
+- [x] Finish translation into German and English of existing content
+- [x] Add keyboard handling to suggest last submitted options when pressing arrow key
 - [ ] Add 'cd' functionality to access folders (both coming into and coming out)
 - [ ] Add maybe like a line between the last one and the input so that there is not Layout Shift
